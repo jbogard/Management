@@ -1,0 +1,91 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>New Error Message arrived in the error queue</title>
+	    <style type="text/css">
+	        h1 
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	            text-decoration : none;
+	            font-size: 175%;     
+                font-weight: normal;
+	        }
+	        
+	        h2 
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	            text-decoration : none;
+	            font-size: 150%;     
+                font-weight: normal;
+	        }
+	        
+	        h3 
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	            text-decoration : none;
+	            font-size: 125%;     
+                font-weight: normal;
+	        }
+	        
+	        h6 
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	        }
+	        
+            table, td, th
+            {
+            padding: 2px 4px 2px 4px;
+            border:1px solid #FF8409;
+            font-size : 77%;
+            font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+            }
+            th
+            {
+            background-color:#FF8409;
+            color:white;
+            }
+            .style1
+            {
+                width: 181px;
+            }
+        </style>
+	</head>
+	<body>
+	
+            <h1>TOO MANY ERRORS RECEIVED IN THE ERROR QUEUE</h1>
+            <h2 id="CountLabel">Number of messages = $$ErrorCount$$</h2>
+            <h6 id="DateTime">Updated as of $$DateTime$$</h6>
+	        <h3>First error message received:</h3>
+        
+        <table id="ErrorValuesTable" style="width:100%;">
+            <tr>
+                <th>ProcessingFailedAddress</th>
+                <td><b> $$ProcessingFailedAddress$$</b></td>
+            </tr>
+            <tr>
+                <th>MessageId</th>
+                <td>$$FailedMessageId$$</td>
+            </tr>
+            <tr>
+                <th>Time Arrived</th>
+                <td>$$TimeSent$$</td>
+            </tr>
+            <tr>
+                <th>FailedQueue</th>
+                <td>$$ProcessingFailedAddress$$</td>
+            </tr>
+            <tr>
+                <th>User Identity</th>
+                <td>$$WindowsIdentity$$</td>
+            </tr>
+            <tr>
+                <th>Message Contents</th>
+                <td>$$XmlBody$$</td>
+            </tr>
+        </table>
+	</body>
+</html>

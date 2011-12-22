@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="NServiceBus.Management.Errors.UIModule.View.ErrorMessageDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="Auto" Width="Auto">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Messages in Error Queue" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,10,10,0" FontFamily="Calibri" FontSize="18" FontWeight="Bold"></TextBlock>
+            <DataGrid AutoGenerateColumns="False"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Name="dataGrid1" MinWidth="280" MinHeight="287" Width="Auto" Height="Auto" ItemsSource="{Binding ErrorMessages}" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.ReprocessCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=MessageId}">Reprocess</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Path=MessageId}" Header="Id"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Path=ProcessingFailedAddress}" Header="Failed Queue"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Path=TimeSent}" Header="Time Arrived"></DataGridTextColumn>
+                    <!--<DataGridTextColumn Binding="{Binding Path=MessageXml}" Header="Message Contents"></DataGridTextColumn>-->
+                    <DataGridTextColumn Binding="{Binding Path=WindowsIdentity}" Header="Identity"></DataGridTextColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Path=MessageId}">Delete</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding MessageXml}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,10,10,0" FontFamily="Calibri" FontSize="12" FontWeight="Bold" TextWrapping="Wrap" Width="300" MinHeight="30" Height="Auto" />
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>

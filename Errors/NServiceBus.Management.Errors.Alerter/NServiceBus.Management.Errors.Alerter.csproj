@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{572594F3-CB71-4764-8154-E80BEDB2AD37}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NServiceBus.Management.Errors.Alerter</RootNamespace>
+    <AssemblyName>NServiceBus.Management.Errors.Alerter</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus, Version=2.6.0.1505, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NServiceBus.2.6.0.1505\lib\net40\NServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core, Version=2.6.0.1505, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NServiceBus.2.6.0.1505\lib\net40\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Host, Version=2.6.0.1505, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NServiceBus.Host.2.6.0.1505\lib\net40\x86\NServiceBus.Host.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlerterSaga.cs" />
+    <Compile Include="AlerterSagaData.cs" />
+    <Compile Include="EndpointConfig.cs" />
+    <Compile Include="ErrorAlertInfo.cs" />
+    <Compile Include="ErrorMessageReceivedHandler.cs" />
+    <Compile Include="MessageHandlers.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterNotification.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBus.Management.Errors.Alerter.Messages\NServiceBus.Management.Errors.Alerter.Messages.csproj">
+      <Project>{C25A5B14-565B-4932-AFEB-375D54DB94BA}</Project>
+      <Name>NServiceBus.Management.Errors.Alerter.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NServiceBus.Management.Errors.Messages\NServiceBus.Management.Errors.Messages.csproj">
+      <Project>{EE39F851-3938-4C11-83B9-1EEEB357C0C1}</Project>
+      <Name>NServiceBus.Management.Errors.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NServiceBus.Management.Errors.Notify\NServiceBus.Management.Errors.Notify.csproj">
+      <Project>{0794E08D-BE4E-4054-A2A3-071435DE728E}</Project>
+      <Name>NServiceBus.Management.Errors.Notify</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>New Error Message arrived in the error queue</title>
+	    <style type="text/css">
+            table, td, th
+            {
+            padding: 2px 4px 2px 4px;
+            border:1px solid #FF8409;
+            font-size : 85%;
+            font-family : "Myriad Web",Verdana,Helvetica,Arial,sans-serif;
+            }
+            th
+            {
+            background-color:#FF8409;
+            color:white;
+            }
+            
+            h1 
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	            text-decoration : none;
+	            font-size: 175%;     
+                font-weight: normal;
+	        }
+	        h3
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	            text-decoration : none;
+	            font-size: 125%;     
+                font-weight: normal;
+	        }
+	        h6 
+	        { 
+	            font-family: "Myriad Web",Verdana,Helvetica,Arial,sans-serif; 
+	            color: #000080; 
+	        }
+            
+        </style>
+	</head>
+	<body>
+	    <h1>Error Messages Received</h1>
+        <h6 id="DateTime">Updated as of $$DateTime$$</h6>
+        <h3 id="CountLabel">Messages in Error Queue: $$ErrorCount$$</h3>
+	   
+        <table id="ErrorListTable" border="2" style="width:100%;" class="borderTable">
+            <tr id="ErrorListTableHeading">
+                <th >
+                    MessageId</th>
+                <th >
+                    Time Arrived</th>
+                <th >
+                    Failed Queue</th>
+                <th >
+                    User Identity</th>
+                <th >
+                    Message Contents</th>
+            </tr>
+            <tr id="ErrorListTableRowValues">
+                <td >
+                    $$FailedMessageId$$</td>
+                <td >
+                    $$TimeSent$$</td>
+                <td >
+                    $$ProcessingFailedAddress$$</td>
+                <td >
+                    $$WindowsIdentity$$</td>
+                <td >
+                    $$XmlBody$$</td>
+            </tr>
+        </table>
+	</body>
+</html>
