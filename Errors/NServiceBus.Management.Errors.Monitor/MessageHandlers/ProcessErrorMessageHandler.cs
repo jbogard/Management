@@ -9,34 +9,26 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
 {
     class ProcessErrorMessageHandler : IHandleMessages<ProcessErrorMessage>
     {
-        public IBus Bus { get; private set; }
+        public IBus Bus { get; set; }
         public IPersistErrorMessages ErrorPersister { get; set; }
         //public INotifyOnError ErrorNotifier { get; set; }
 
         public void Handle(ProcessErrorMessage message)
         {
-            // Get the xml content of the message that failed
-            var doc = new XmlDocument();
-            var messageBodyXml = message.XmlBody;
-
-            // Get the header list as a key value dictionary...
-            Dictionary<string, string> headerDictionary = message.HeaderList;
-
+           
             ErrorMessageReceived errorEvent = Bus.CreateInstance<ErrorMessageReceived>(m =>
             {
                 m.FailedMessageId = message.FailedMessageId;
-                m.HeaderList = headerDictionary;
+                m.AdditionalInformation = message.AdditionalInformation;
                 m.ProcessingFailedAddress = message.ProcessingFailedAddress;
                 m.TimeSent = message.TimeSent;
                 m.WindowsIdentity = message.WindowsIdentity;
-                m.XmlBody = messageBodyXml;
+                m.XmlBody = message.XmlBody;
+                m.ExceptionInformation = message.ExceptionInformation;
             });
 
             // Save the error in the persistent store
             ErrorPersister.SaveErrorMessage(errorEvent);
-
-            // Notify about the error
-            //ErrorNotifier.NotifyOnError(errorEvent);
 
             // Publish event
             Bus.Publish(errorEvent);

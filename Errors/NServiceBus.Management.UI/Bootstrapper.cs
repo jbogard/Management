@@ -47,6 +47,7 @@ namespace NServiceBus.Management.UI
 
             // Initialize the bus
             Bus = (UnicastBus)NServiceBus.Configure.With()
+                .DefineEndpointName("NServiceBus.Management.UI")
             .DefaultBuilder()
             .XmlSerializer()
             .MsmqTransport()
@@ -63,9 +64,7 @@ namespace NServiceBus.Management.UI
             this.Container.RegisterInstance<IBus>(Bus);
 
             // Register Raven as the IQuery for error persistence
-            DocumentStore documentStore = new DocumentStore();
-            documentStore.Url = ConfigurationManager.AppSettings["DocumentDbUrl"];
-            documentStore.DefaultDatabase = ConfigurationManager.AppSettings["DefaultDocumentDB"];
+            DocumentStore documentStore = new DocumentStore { ConnectionStringName = "RavenDbConnectionString" };
             documentStore.Initialize();
             ravenStore.DocumentStore = documentStore;
 

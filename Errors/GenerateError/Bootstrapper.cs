@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NServiceBus;
+using NServiceBus.Faults;
 
 namespace GenerateError
 {
     class Bootstrapper : IWantToRunAtStartup
     {
-        public IBus Bus { get; private set; }
+        public IBus Bus { get; set; }
+        public IManageMessageFailures FailureManager { get; set; }
+
         public void Run()
         {
+            
             Console.WriteLine("Press any key to generate a message that will result in the error queue");
             int i = 1;
             while (Console.ReadLine() != null)

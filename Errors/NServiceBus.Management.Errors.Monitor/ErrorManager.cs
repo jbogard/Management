@@ -3,9 +3,8 @@ namespace NServiceBus.Management.Errors.Monitor
 {
     using System;
     using System.Messaging;
-    using System.Transactions;
     using Utils;
-    using NServiceBus.Unicast.Transport.Msmq;
+    using System.Transactions;
 
     public class ErrorManager
     {
@@ -14,15 +13,15 @@ namespace NServiceBus.Management.Errors.Monitor
         private MessageQueue queue;
         private static readonly TimeSpan TimeoutDuration = TimeSpan.FromSeconds(5);
 
-        public virtual string InputQueue
+        public virtual Address InputQueue
         {
             set
             {
-                string path = MsmqUtilities.GetFullPath(value);
+                var path = MsmqUtilities.GetFullPath(value);
                 var q = new MessageQueue(path);
 
                 if (!q.Transactional)
-                    throw new ArgumentException("Queue must be transactional (" + q.Path + ").");
+                    throw new ArgumentException(string.Format(NonTransactionalQueueErrorMessageFormat, q.Path));
 
                 queue = q;
 
@@ -45,102 +44,112 @@ namespace NServiceBus.Management.Errors.Monitor
         /// <param name="messageId"></param>
         public void ReturnMessageToSourceQueue(string messageId)
         {
-            try
+            //using (var scope = new TransactionScope()) --> This will be called from within a NSB message handler.
             {
-                ReturnMessage(messageId);
-            }
-            catch (MessageQueueException ex)
-            {
-                if (ex.MessageQueueErrorCode != MessageQueueErrorCode.IOTimeout)
+                try
                 {
-                    Console.WriteLine("Could not return message to source queue.\nReason: " + ex.Message);
-                    Console.WriteLine(ex.StackTrace);
-                }
+                    var message = queue.ReceiveById(messageId, TimeoutDuration, MessageQueueTransactionType.Automatic);
 
-                Console.WriteLine("Message ID not found in time. Going to look in message labels for original ID.");
+                    var tm = MsmqUtilities.Convert(message);
 
-                foreach (var m in queue.GetAllMessages())
-                {
-                    var id = MsmqTransport.GetRealMessageId(m);
-                    if (id == messageId)
+                    if (!tm.Headers.ContainsKey(Faults.HeaderKeys.FailedQ))
                     {
-                        try
-                        {
-                            ReturnMessage(m.Id);
-                            break;
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("Could not return message to source queue.\nReason: " + e.Message);
-                            Console.WriteLine(e.StackTrace);
-                        }
+                        Console.WriteLine("ERROR: Message does not have a header indicating from which queue it came. Cannot be automatically returned to queue.");
+                        return;
                     }
+
+                    using (var q = new MessageQueue(MsmqUtilities.GetFullPath(Address.Parse(tm.Headers[Faults.HeaderKeys.FailedQ]))))
+                        q.Send(message, MessageQueueTransactionType.Automatic);
+
+                    Console.WriteLine("Success.");
+                    //scope.Complete();
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Could not return message to source queue.\nReason: " + e.Message);
-                Console.WriteLine(e.StackTrace);
-            }
-        }
-
-        public void RemoveMessage(string messageId)
-        {
-            try
-            {
-                var m = queue.ReceiveById(messageId, TimeSpan.FromSeconds(5), MessageQueueTransactionType.Automatic);
-            }
-            catch (MessageQueueException ex)
-            {
-                if (ex.MessageQueueErrorCode != MessageQueueErrorCode.IOTimeout)
+                catch (MessageQueueException ex)
                 {
-                    Console.WriteLine("Could not return message to source queue.\nReason: " + ex.Message);
-                    Console.WriteLine(ex.StackTrace);
-                }
-
-                Console.WriteLine("Message ID not found in time. Going to look in message labels for original ID.");
-
-                foreach (var m in queue.GetAllMessages())
-                {
-                    var id = MsmqTransport.GetRealMessageId(m);
-                    if (id == messageId)
+                    if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
                     {
-                        try
+                        Console.WriteLine(NoMessageFoundErrorFormat, messageId);
+
+                        foreach (var m in queue.GetAllMessages())
                         {
-                            RemoveMessage(m.Id);
-                            Console.WriteLine("Found id and removed message from queue.");
-                            break;
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("Could not return message to source queue.\nReason: " + e.Message);
-                            Console.WriteLine(e.StackTrace);
+                            var tm = MsmqUtilities.Convert(m);
+
+                            if (tm.Headers.ContainsKey(Faults.HeaderKeys.OriginalId))
+                            {
+                                if (messageId != tm.Headers[Faults.HeaderKeys.OriginalId])
+                                    continue;
+
+                                Console.WriteLine("Found message - going to return to queue.");
+
+                                using (var tx = new TransactionScope(TransactionScopeOption.RequiresNew))
+                                {
+                                    using (var q = new MessageQueue(
+                                                MsmqUtilities.GetFullPath(
+                                                    Address.Parse(tm.Headers[Faults.HeaderKeys.FailedQ]))))
+                                        q.Send(m, MessageQueueTransactionType.Automatic);
+
+                                    queue.ReceiveByLookupId(MessageLookupAction.Current, m.LookupId,
+                                                            MessageQueueTransactionType.Automatic);
+
+                                    tx.Complete();
+                                }
+
+                                Console.WriteLine("Success.");
+                                //scope.Complete();
+
+                                return;
+                            }
                         }
                     }
                 }
             }
         }
 
-        private void ReturnMessage(string messageId)
+        public void DeleteMessageFromSourceQueue(string messageId)
         {
-            //using (var scope = new TransactionScope())
+            //using (var scope = new TransactionScope()) --> This will be called from within a NSB message handler.
             {
-                var m = queue.ReceiveById(messageId, TimeSpan.FromSeconds(5), MessageQueueTransactionType.Automatic);
-
-                var failedQueue = MsmqTransport.GetFailedQueue(m);
-
-                m.Label = MsmqTransport.GetLabelWithoutFailedQueue(m);
-
-                using (var q = new MessageQueue(failedQueue))
+                try
                 {
-                    Console.WriteLine("Returning message with id " + messageId + " to queue " + failedQueue);
-                    q.Send(m, MessageQueueTransactionType.Automatic);
+                    var message = queue.ReceiveById(messageId, TimeoutDuration, MessageQueueTransactionType.Automatic);
+                    Console.WriteLine("Success.");
+                    //scope.Complete();
                 }
+                catch (MessageQueueException ex)
+                {
+                    if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
+                    {
+                        Console.WriteLine(NoMessageFoundErrorFormat, messageId);
 
-                //scope.Complete();
+                        foreach (var m in queue.GetAllMessages())
+                        {
+                            var tm = MsmqUtilities.Convert(m);
+
+                            if (tm.Headers.ContainsKey(Faults.HeaderKeys.OriginalId))
+                            {
+                                if (messageId != tm.Headers[Faults.HeaderKeys.OriginalId])
+                                    continue;
+
+                                Console.WriteLine("Found message - going to delete");
+
+                                using (var tx = new TransactionScope(TransactionScopeOption.RequiresNew))
+                                {
+                                    queue.ReceiveByLookupId(MessageLookupAction.Current, m.LookupId,
+                                                            MessageQueueTransactionType.Automatic);
+                                    tx.Complete();
+                                }
+
+                                Console.WriteLine("Success.");
+                                //scope.Complete();
+
+                                return;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        
+       
     }
 }

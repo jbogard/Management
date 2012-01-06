@@ -13,7 +13,7 @@ namespace NServiceBus.Management.UI.MessageHandlers
         IHandleMessages<ErrorMessageDeleted>,
         IHandleMessages<ErrorMessageReprocessed>
     {
-        public IEventAggregator eventAggregator { get; private set; }
+        public IEventAggregator eventAggregator { get; set; }
         public void Handle(ErrorMessageReceived message)
         {
             App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,

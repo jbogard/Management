@@ -2,6 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Personal\NServiceBus.Management.Errors\NServiceBus.Management.Errors.Monitor\bin\Debug\NServiceBus.Host.exe</StartProgram>
+    <StartProgram>C:\Git\NServiceBus\Management\Errors\NServiceBus.Management.Errors.Monitor\bin\Debug\NServiceBus.Host.exe</StartProgram>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>

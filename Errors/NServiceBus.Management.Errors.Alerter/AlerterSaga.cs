@@ -32,7 +32,7 @@ namespace NServiceBus.Management.Errors.Alerter
                 Data.IsTimeoutAlreadyRequested = true;
                 // This is the first message received, so request a timeout. We are going to keep
                 // adding all of the error messages received in the timespan and send out one alert.
-                RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), null);
+                RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), "state");
             }
 
             // Add to the list
@@ -64,7 +64,7 @@ namespace NServiceBus.Management.Errors.Alerter
                 });
                 IncrementAlertCount(Data.ErrorListToAlert);
                 // Request another timeout
-                RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), null);
+                RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), "state");
                 return;
             }
 
@@ -76,27 +76,23 @@ namespace NServiceBus.Management.Errors.Alerter
                     m.ErrorList = errorList;
                 });
                 IncrementAlertCount(Data.ErrorListToAlert);
-            }
-
-            // Request another timeout if we have errors
-            if (Data.ErrorListToAlert.Count > 0)
-            {
-                RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), null);
+                RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), "state");
             }
             else
             {
                 Data.IsTimeoutAlreadyRequested = false;
-                // So when we get a new error, we start requesting timeouts again.
             }
         }
 
         private void ClearAlertForMessage(string id)
         {
-            var messageToRemove = (from msg in Data.ErrorListToAlert
-                    where msg.MessageId.Equals(id)
-                    select msg).FirstOrDefault();
             // Multiple clients could send the Delete command. If it so happens that the GUI hasn't been updated.
-            // The command should succeed. 
+            // The command should succeed.
+            var messageToRemove = (from msg in Data.ErrorListToAlert
+                    where msg.MessageId.Equals(id) ||
+                    msg.ErrorMessage.AdditionalInformation["NServiceBus.OriginalId"].Equals(id)
+                    select msg).FirstOrDefault();
+            
             if (messageToRemove != null)
             {
                 // Remove from the alert list
@@ -111,6 +107,5 @@ namespace NServiceBus.Management.Errors.Alerter
                 info.NumberOfTimesAlerted++;
             }
         }
-
     }
 }

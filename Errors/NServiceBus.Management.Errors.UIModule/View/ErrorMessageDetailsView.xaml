@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              Height="Auto" Width="Auto">
-    <Grid>
-        <StackPanel Orientation="Vertical">
+    <Grid Width="Auto" Height="Auto">
+        <StackPanel Orientation="Vertical" Width="Auto" HorizontalAlignment="Stretch">
             <TextBlock Text="Messages in Error Queue" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,10,10,0" FontFamily="Calibri" FontSize="18" FontWeight="Bold"></TextBlock>
-            <DataGrid AutoGenerateColumns="False"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Name="dataGrid1" MinWidth="280" MinHeight="287" Width="Auto" Height="Auto" ItemsSource="{Binding ErrorMessages}" IsReadOnly="True">
+            <DataGrid AutoGenerateColumns="False"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Name="dataGrid1" MinHeight="100" Width="Auto" Height="Auto" ItemsSource="{Binding ErrorMessages}" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -17,7 +17,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding Path=MessageId}" Header="Id"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Path=MessageId}" Header="Original Message Id"></DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Path=ProcessingFailedAddress}" Header="Failed Queue"></DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding Path=TimeSent}" Header="Time Arrived"></DataGridTextColumn>
                     <!--<DataGridTextColumn Binding="{Binding Path=MessageXml}" Header="Message Contents"></DataGridTextColumn>-->
@@ -32,7 +32,12 @@
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding MessageXml}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,10,10,0" FontFamily="Calibri" FontSize="12" FontWeight="Bold" TextWrapping="Wrap" Width="300" MinHeight="30" Height="Auto" />
+                        <StackPanel Orientation="Vertical" Width="650" HorizontalAlignment="Left" Margin="10,0,0,0" Height="Auto" >
+                            <TextBlock Text="Exception Information:" FontFamily="Calibri" FontSize="14" FontWeight="Bold"></TextBlock>
+                            <TextBlock Text="{Binding ExceptionInformation}" Margin="10,0,0,10" FontFamily="Calibri" FontSize="12" TextWrapping="Wrap"  ></TextBlock>
+                            <TextBlock Text="Message Body:"   FontFamily="Calibri" FontSize="14" FontWeight="Bold"></TextBlock>
+                            <TextBlock Text="{Binding MessageXml}" FontFamily="Calibri" FontSize="12" TextWrapping="Wrap" ></TextBlock>
+                        </StackPanel>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>

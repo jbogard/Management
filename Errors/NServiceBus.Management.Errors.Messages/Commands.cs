@@ -5,21 +5,21 @@ using System.Text;
 
 namespace NServiceBus.Management.Errors.Messages
 {
-    public class ReprocessErrorMessage : IMessage
+    public class ReprocessErrorMessage : ICommand
     {
         public string MessageId { get; set; }
     }
 
-    public class ReprocessAllErrors : IMessage
+    public class ReprocessAllErrors : ICommand
     {
     }
 
-    public class DeleteErrorMessage : IMessage
+    public class DeleteErrorMessage : ICommand
     {
         public string MessageId { get; set; }
     }
 
-    public interface ProcessErrorMessage : IErrorMessageDetails, IMessage
+    public interface ProcessErrorMessage : IErrorMessageDetails, ICommand
     {
     }
 }

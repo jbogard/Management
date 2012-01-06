@@ -81,6 +81,20 @@ namespace NServiceBus.Management.Errors.UIModule.Model
             }
         }
 
+        private string exceptionInformation;
+        public string ExceptionInformation
+        {
+            get { return exceptionInformation; }
+            set
+            {
+                if (exceptionInformation != value)
+                {
+                    exceptionInformation = value;
+                    RaisePropertyChanged("ExceptionInformation");
+                }
+            }
+        }
+
         private void RaisePropertyChanged(string property)
         {
             if (PropertyChanged != null)

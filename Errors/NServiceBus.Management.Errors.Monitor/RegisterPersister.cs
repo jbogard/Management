@@ -17,13 +17,14 @@ namespace NServiceBus.Management.Errors.Monitor
         {
             PersistErrorsInRavenDB persister = PersistErrorsInRavenDB.Instance;
 
-            DocumentStore documentStore = new DocumentStore();
-            documentStore.Url = ConfigurationManager.AppSettings["DocumentDbUrl"];
-            documentStore.DefaultDatabase = ConfigurationManager.AppSettings["DefaultDocumentDB"];
+            DocumentStore documentStore = new DocumentStore { ConnectionStringName = "RavenDbConnectionString" };
             documentStore.Initialize();
+            persister.DocumentStore = documentStore;
 
-            Configure.Instance.Configurer.ConfigureComponent<PersistErrorsInRavenDB>(ObjectBuilder.ComponentCallModelEnum.Singleton);
-            Configure.Instance.Configurer.ConfigureProperty<PersistErrorsInRavenDB>(mt => mt.DocumentStore, documentStore);
+            NServiceBus.Configure.With().Configurer.RegisterSingleton<IPersistErrorMessages>(persister);
+
+            //Configure.Instance.Configurer.ConfigureComponent<PersistErrorsInRavenDB>(ObjectBuilder.ComponentCallModelEnum.Singleton);
+            //Configure.Instance.Configurer.ConfigureProperty<PersistErrorsInRavenDB>(mt => mt.DocumentStore, documentStore);
 
             //NServiceBus.Configure.With().Configurer.RegisterSingleton<IPersistErrorMessages>(persister);            
         }

@@ -40,9 +40,24 @@ namespace NServiceBus.Management.Errors.Persister
         {
             using (var session = documentStore.OpenSession())
             {
-                var errorMessage = (from errMsg in session.Query<ErrorMessageReceived>()
-                                    where errMsg.FailedMessageId.Equals(messageId)
-                                    select errMsg).FirstOrDefault();
+                // The following Linq query does not work!!!!! Looks like a bug in the linq provider.
+                //var errorMessage = (from errMsg in session.Query<ErrorMessageReceived>()
+                //                    where (errMsg.FailedMessageId.Equals(messageId) || errMsg.AdditionalInformation["NServiceBus.OriginalId"].Equals(messageId))
+                //                    select errMsg).FirstOrDefault();
+
+                var messages = from errMsg in session.Query<ErrorMessageReceived>()
+                               select errMsg;
+
+                ErrorMessageReceived errorMessage = null;
+                foreach (ErrorMessageReceived errMsg in messages)
+                {
+                    if (errMsg.FailedMessageId.Equals(messageId) || errMsg.AdditionalInformation["NServiceBus.OriginalId"].Equals(messageId))
+                    {
+                        errorMessage = errMsg;
+                        break;
+                    }
+                }
+
                 if (errorMessage != null)
                 {
                     session.Delete<ErrorMessageReceived>(errorMessage);

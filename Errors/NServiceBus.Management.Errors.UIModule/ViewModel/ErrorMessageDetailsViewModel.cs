@@ -67,7 +67,8 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
                     MessageXml = errorMessage.XmlBody,
                     ProcessingFailedAddress = errorMessage.ProcessingFailedAddress,
                     TimeSent = errorMessage.TimeSent,
-                    WindowsIdentity = errorMessage.WindowsIdentity
+                    WindowsIdentity = errorMessage.WindowsIdentity,
+                    ExceptionInformation = errorMessage.ExceptionInformation
                 };
 
                 errorMessages.Add(detail);
@@ -80,11 +81,12 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
             // Add this new error to the observable collection.
             ErrorMessageDetails newError = new ErrorMessageDetails()
             {
-                MessageId = message.FailedMessageId,
+                MessageId = message.AdditionalInformation["NServiceBus.OriginalId"],
                 MessageXml = message.XmlBody,
                 ProcessingFailedAddress = message.ProcessingFailedAddress,
                 TimeSent = message.TimeSent,
-                WindowsIdentity = message.WindowsIdentity
+                WindowsIdentity = message.WindowsIdentity,
+                ExceptionInformation = message.ExceptionInformation
             };
             errorMessages.Add(newError);
         }
