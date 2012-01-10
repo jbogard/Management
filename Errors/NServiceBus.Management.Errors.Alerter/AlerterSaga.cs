@@ -11,8 +11,8 @@ namespace NServiceBus.Management.Errors.Alerter
 {
     class AlerterSaga : Saga<AlerterSagaData>, 
         IAmStartedByMessages<ProcessErrorMessageReceived>,
-        IHandleMessages<ProcessErrorMessageDeleted>,
-        IHandleMessages<ProcessErrorMessageReprocessed>
+        IAmStartedByMessages<ProcessErrorMessageDeleted>,
+        IAmStartedByMessages<ProcessErrorMessageReprocessed>
     {
         private int TimeToWaitBeforeAlerting = int.Parse(ConfigurationManager.AppSettings["TimeToWaitBeforeAlerting"]);
         private int CriticalErrorLimit = int.Parse(ConfigurationManager.AppSettings["CriticalErrorLimit"]);
@@ -42,11 +42,13 @@ namespace NServiceBus.Management.Errors.Alerter
 
         public void Handle(ProcessErrorMessageDeleted message)
         {
+            Data.AlerterSagaId = message.AlerterSagaId;
             ClearAlertForMessage(message.MessageDetails.MessageId);
         }
 
         public void Handle(ProcessErrorMessageReprocessed message)
         {
+            Data.AlerterSagaId = message.AlerterSagaId;
             ClearAlertForMessage(message.MessageDetails.MessageId);
         }
 

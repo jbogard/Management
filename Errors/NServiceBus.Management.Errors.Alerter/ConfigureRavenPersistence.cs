@@ -11,9 +11,9 @@ namespace NServiceBus.Management.Errors.Alerter
         public void Init()
         {
             Configure.Instance
-                .RunTimeoutManager()
-                .UseRavenTimeoutPersister()
-                .RavenSagaPersister();
+                .RunTimeoutManager();
+                //.UseRavenTimeoutPersister()
+                //.RavenSagaPersister();
                             
         }
     }
