@@ -86,18 +86,18 @@ namespace NServiceBus.Management.Errors.Alerter
 
         private void ClearAlertForMessage(string id)
         {
-            // Multiple clients could send the Delete command. If it so happens that the GUI hasn't been updated.
-            // The command should succeed.
+            // Messages (New Error Message Received and or ErrorMessageDeleted or reprocessed), can 
+            // be processed out of sequence. If the error message deleted arrives first, this code
+            // will exception and the message will be sent back to the queue, giving the message received
+            // to cause it to get added in the list first. After which the code will succeed.
+
             var messageToRemove = (from msg in Data.ErrorListToAlert
                     where msg.MessageId.Equals(id) ||
                     msg.ErrorMessage.AdditionalInformation["NServiceBus.OriginalId"].Equals(id)
-                    select msg).FirstOrDefault();
+                    select msg).First();
             
-            if (messageToRemove != null)
-            {
-                // Remove from the alert list
-                Data.ErrorListToAlert.Remove(messageToRemove);
-            }
+            Data.ErrorListToAlert.Remove(messageToRemove);
+            
         }
 
         private void IncrementAlertCount(List<ErrorAlertInfo> list)

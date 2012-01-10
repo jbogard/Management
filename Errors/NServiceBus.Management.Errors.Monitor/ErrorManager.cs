@@ -42,7 +42,7 @@ namespace NServiceBus.Management.Errors.Monitor
         /// May throw a timeout exception if a message with the given id cannot be found.
         /// </summary>
         /// <param name="messageId"></param>
-        public void ReturnMessageToSourceQueue(string messageId)
+        public bool ReturnMessageToSourceQueue(string messageId)
         {
             //using (var scope = new TransactionScope()) --> This will be called from within a NSB message handler.
             {
@@ -55,13 +55,14 @@ namespace NServiceBus.Management.Errors.Monitor
                     if (!tm.Headers.ContainsKey(Faults.HeaderKeys.FailedQ))
                     {
                         Console.WriteLine("ERROR: Message does not have a header indicating from which queue it came. Cannot be automatically returned to queue.");
-                        return;
+                        return false;
                     }
 
                     using (var q = new MessageQueue(MsmqUtilities.GetFullPath(Address.Parse(tm.Headers[Faults.HeaderKeys.FailedQ]))))
                         q.Send(message, MessageQueueTransactionType.Automatic);
 
                     Console.WriteLine("Success.");
+                    return true;
                     //scope.Complete();
                 }
                 catch (MessageQueueException ex)
@@ -96,16 +97,16 @@ namespace NServiceBus.Management.Errors.Monitor
 
                                 Console.WriteLine("Success.");
                                 //scope.Complete();
-
-                                return;
+                                return true;
                             }
                         }
                     }
                 }
+                return false;
             }
         }
 
-        public void DeleteMessageFromSourceQueue(string messageId)
+        public bool DeleteMessageFromSourceQueue(string messageId)
         {
             //using (var scope = new TransactionScope()) --> This will be called from within a NSB message handler.
             {
@@ -113,6 +114,7 @@ namespace NServiceBus.Management.Errors.Monitor
                 {
                     var message = queue.ReceiveById(messageId, TimeoutDuration, MessageQueueTransactionType.Automatic);
                     Console.WriteLine("Success.");
+                    return true;
                     //scope.Complete();
                 }
                 catch (MessageQueueException ex)
@@ -140,16 +142,15 @@ namespace NServiceBus.Management.Errors.Monitor
                                 }
 
                                 Console.WriteLine("Success.");
+                                return true;
                                 //scope.Complete();
 
-                                return;
                             }
                         }
                     }
                 }
+                return false;
             }
         }
-
-       
     }
 }

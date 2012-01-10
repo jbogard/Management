@@ -20,14 +20,14 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
 
             // Get rid of message in the storage queue
             errorManager.InputQueue = new Address(string.Format("{0}.Storage", ConfigurationManager.AppSettings["ErrorQueueToMonitor"]),Environment.MachineName);
-            errorManager.DeleteMessageFromSourceQueue(message.MessageId);
+            if (errorManager.DeleteMessageFromSourceQueue(message.MessageId))
+            {
+                // Get rid of message in the persistent store.
+                ErrorPersister.DeleteErrorMessage(message.MessageId);
 
-            // Get rid of message in the persistent store.
-            ErrorPersister.DeleteErrorMessage(message.MessageId);
-
-            // Publish event
-            Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.MessageId; });
-            
+                // Publish event
+                Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.MessageId; });
+            }
         }
     }
 }

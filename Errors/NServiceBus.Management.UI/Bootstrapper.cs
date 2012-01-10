@@ -45,9 +45,11 @@ namespace NServiceBus.Management.UI
             base.ConfigureContainer();
             var eventAggregator = this.Container.Resolve<IEventAggregator>();
 
+            var q = ConfigurationManager.AppSettings["OverrideEndpointName"];
+
             // Initialize the bus
             Bus = (UnicastBus)NServiceBus.Configure.With()
-                .DefineEndpointName("NServiceBus.Management.UI")
+                .DefineEndpointName(q)
             .DefaultBuilder()
             .XmlSerializer()
             .MsmqTransport()

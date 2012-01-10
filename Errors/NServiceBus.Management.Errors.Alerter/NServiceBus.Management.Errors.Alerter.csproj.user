@@ -3,6 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Git\NServiceBus\Management\Errors\NServiceBus.Management.Errors.Alerter\bin\Debug\NServiceBus.Host.exe</StartProgram>
-    <StartArguments>NServiceBus.Production</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>
