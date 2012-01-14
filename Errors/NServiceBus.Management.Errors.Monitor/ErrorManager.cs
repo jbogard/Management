@@ -82,7 +82,7 @@ namespace NServiceBus.Management.Errors.Monitor
 
                                 Console.WriteLine("Found message - going to return to queue.");
 
-                                using (var tx = new TransactionScope(TransactionScopeOption.RequiresNew))
+                                //using (var tx = new TransactionScope(TransactionScopeOption.RequiresNew))
                                 {
                                     using (var q = new MessageQueue(
                                                 MsmqUtilities.GetFullPath(
@@ -92,7 +92,7 @@ namespace NServiceBus.Management.Errors.Monitor
                                     queue.ReceiveByLookupId(MessageLookupAction.Current, m.LookupId,
                                                             MessageQueueTransactionType.Automatic);
 
-                                    tx.Complete();
+                                    //tx.Complete();
                                 }
 
                                 Console.WriteLine("Success.");
@@ -134,11 +134,11 @@ namespace NServiceBus.Management.Errors.Monitor
 
                                 Console.WriteLine("Found message - going to delete");
 
-                                using (var tx = new TransactionScope(TransactionScopeOption.RequiresNew))
+                                //using (var tx = new TransactionScope(TransactionScopeOption.RequiresNew))
                                 {
                                     queue.ReceiveByLookupId(MessageLookupAction.Current, m.LookupId,
                                                             MessageQueueTransactionType.Automatic);
-                                    tx.Complete();
+                                    //tx.Complete();
                                 }
 
                                 Console.WriteLine("Success.");

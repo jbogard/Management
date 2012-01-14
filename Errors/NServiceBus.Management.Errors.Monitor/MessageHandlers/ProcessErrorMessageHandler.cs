@@ -19,6 +19,7 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
             ErrorMessageReceived errorEvent = Bus.CreateInstance<ErrorMessageReceived>(m =>
             {
                 m.FailedMessageId = message.FailedMessageId;
+                m.OriginalMessageId = message.OriginalMessageId;
                 m.AdditionalInformation = message.AdditionalInformation;
                 m.ProcessingFailedAddress = message.ProcessingFailedAddress;
                 m.TimeSent = message.TimeSent;

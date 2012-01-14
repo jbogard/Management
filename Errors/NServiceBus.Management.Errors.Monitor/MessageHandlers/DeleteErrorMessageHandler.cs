@@ -16,17 +16,17 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
 
         public void Handle(DeleteErrorMessage message)
         {
-            Console.WriteLine("Removing message {0}", message.MessageId);
+            Console.WriteLine("Removing message {0}", message.OriginalMessageId);
 
             // Get rid of message in the storage queue
             errorManager.InputQueue = new Address(string.Format("{0}.Storage", ConfigurationManager.AppSettings["ErrorQueueToMonitor"]),Environment.MachineName);
-            if (errorManager.DeleteMessageFromSourceQueue(message.MessageId))
+            if (errorManager.DeleteMessageFromSourceQueue(message.OriginalMessageId))
             {
                 // Get rid of message in the persistent store.
-                ErrorPersister.DeleteErrorMessage(message.MessageId);
+                ErrorPersister.DeleteErrorMessage(message.OriginalMessageId);
 
                 // Publish event
-                Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.MessageId; });
+                Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.OriginalMessageId; });
             }
         }
     }

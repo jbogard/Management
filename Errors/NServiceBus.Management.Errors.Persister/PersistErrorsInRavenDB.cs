@@ -42,7 +42,7 @@ namespace NServiceBus.Management.Errors.Persister
             {
                 // The following Linq query does not work!!!!! Looks like a bug in the linq provider.
                 //var errorMessage = (from errMsg in session.Query<ErrorMessageReceived>()
-                //                    where (errMsg.FailedMessageId.Equals(messageId) || errMsg.AdditionalInformation["NServiceBus.OriginalId"].Equals(messageId))
+                //                    where (errMsg.FailedMessageId.Equals(messageId) || errMsg.OriginalMessageId.Equals(messageId))
                 //                    select errMsg).FirstOrDefault();
 
                 var messages = from errMsg in session.Query<ErrorMessageReceived>()
@@ -51,7 +51,7 @@ namespace NServiceBus.Management.Errors.Persister
                 ErrorMessageReceived errorMessage = null;
                 foreach (ErrorMessageReceived errMsg in messages)
                 {
-                    if (errMsg.FailedMessageId.Equals(messageId) || errMsg.AdditionalInformation["NServiceBus.OriginalId"].Equals(messageId))
+                    if (errMsg.FailedMessageId.Equals(messageId) || errMsg.OriginalMessageId.Equals(messageId))
                     {
                         errorMessage = errMsg;
                         break;

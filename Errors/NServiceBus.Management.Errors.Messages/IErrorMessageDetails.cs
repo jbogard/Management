@@ -8,6 +8,7 @@ namespace NServiceBus.Management.Errors.Messages
     public interface IErrorMessageDetails 
     {
         string FailedMessageId { get; set; }
+        string OriginalMessageId { get; set; }
         string ProcessingFailedAddress { get; set; }
         string XmlBody { get; set; }
         DateTime TimeSent { get; set; }

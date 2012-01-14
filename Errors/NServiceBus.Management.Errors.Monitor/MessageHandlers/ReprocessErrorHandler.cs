@@ -21,13 +21,13 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
             errorManager.InputQueue = new Address(string.Format("{0}.Storage", ConfigurationManager.AppSettings["ErrorQueueToMonitor"]), Environment.MachineName);
 
             // Reprocess the error message.
-            if (errorManager.ReturnMessageToSourceQueue(messageToReprocess.MessageId))
+            if (errorManager.ReturnMessageToSourceQueue(messageToReprocess.OriginalMessageId))
             {
                 // Remove message from the persistent store.
-                ErrorPersister.DeleteErrorMessage(messageToReprocess.MessageId);
+                ErrorPersister.DeleteErrorMessage(messageToReprocess.OriginalMessageId);
 
                 // Publish event
-                Bus.Publish<ErrorMessageReprocessed>(m => { m.MessageId = messageToReprocess.MessageId; });
+                Bus.Publish<ErrorMessageReprocessed>(m => { m.MessageId = messageToReprocess.OriginalMessageId; });
             }
         }
     }

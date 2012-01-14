@@ -81,7 +81,7 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
             // Add this new error to the observable collection.
             ErrorMessageDetails newError = new ErrorMessageDetails()
             {
-                MessageId = message.AdditionalInformation["NServiceBus.OriginalId"],
+                MessageId = message.OriginalMessageId,
                 MessageXml = message.XmlBody,
                 ProcessingFailedAddress = message.ProcessingFailedAddress,
                 TimeSent = message.TimeSent,
@@ -94,7 +94,7 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
         private void ReprocessCommandExecuted(string messageId)
         {
             // We have the message we want to reprocess.
-            ReprocessErrorMessage reprocessCommand = new ReprocessErrorMessage() { MessageId = messageId };
+            ReprocessErrorMessage reprocessCommand = new ReprocessErrorMessage() { OriginalMessageId = messageId };
             bus.Send(reprocessCommand);
 
             // Remove item from the list.
@@ -104,7 +104,7 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
         private void DeleteCommandExecuted(string messageId)
         {
             // We have the message we want to delete.
-            DeleteErrorMessage deleteCommand = new DeleteErrorMessage() { MessageId = messageId };
+            DeleteErrorMessage deleteCommand = new DeleteErrorMessage() { OriginalMessageId = messageId };
             bus.Send(deleteCommand);
 
             // Remove item from the list.

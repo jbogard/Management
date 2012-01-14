@@ -65,6 +65,7 @@ namespace NServiceBus.Management.Errors.Alerter
                     m.FirstErrorMessage = Data.ErrorListToAlert.First().ErrorMessage;
                 });
                 IncrementAlertCount(Data.ErrorListToAlert);
+                
                 // Request another timeout
                 RequestUtcTimeout(TimeSpan.FromSeconds(TimeToWaitBeforeAlerting), "state");
                 return;
@@ -95,7 +96,7 @@ namespace NServiceBus.Management.Errors.Alerter
 
             var messageToRemove = (from msg in Data.ErrorListToAlert
                     where msg.MessageId.Equals(id) ||
-                    msg.ErrorMessage.AdditionalInformation["NServiceBus.OriginalId"].Equals(id)
+                    msg.ErrorMessage.OriginalMessageId.Equals(id)
                     select msg).First();
             
             Data.ErrorListToAlert.Remove(messageToRemove);

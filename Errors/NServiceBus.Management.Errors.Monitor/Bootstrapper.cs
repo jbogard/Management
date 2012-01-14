@@ -86,20 +86,25 @@ namespace NServiceBus.Management.Errors.Monitor
 
             var processingFailedAddress = headerDictionary["NServiceBus.FailedQ"];
             var windowsIdentity = headerDictionary["WinIdName"];
+            var originalId = headerDictionary["NServiceBus.OriginalId"];
 
-            // Remove the Windows Identity and the Processing Failed address from the dictionary to avoid repeating information
+            // Promoting the Processing Failed address, Windows Identity and the OriginalId from the dictionary 
+            // to the main interface to provide more clarity about the error.
             headerDictionary.Remove("NServiceBus.FailedQ");
             headerDictionary.Remove("WinIdName");
+            headerDictionary.Remove("NServiceBus.OriginalId");
 
-            var exceptionInfo = string.Format("{0} - {1}", headerDictionary["NServiceBus.ExceptionInfo.ExceptionType"],
+            var exceptionInfo = string.Format("{0} - {1} {2}", headerDictionary["NServiceBus.ExceptionInfo.ExceptionType"],
+                headerDictionary["NServiceBus.ExceptionInfo.Message"],
                 headerDictionary["NServiceBus.ExceptionInfo.StackTrace"]);
             
             // Send a command to the processing endpoint.
             Bus.Send<ProcessErrorMessage>(m =>
             {
                 m.FailedMessageId = message.Id;
+                m.OriginalMessageId = originalId;
                 m.ProcessingFailedAddress = processingFailedAddress;
-                m.TimeSent = message.TimeSent;
+                m.TimeSent = DateTime.ParseExact(headerDictionary["NServiceBus.TimeSent"], "yyyy-MM-dd HH:mm:ss:ffffff Z", System.Globalization.CultureInfo.InvariantCulture);
                 m.WindowsIdentity = windowsIdentity; 
                 m.AdditionalInformation = headerDictionary;
                 m.XmlBody = messageBodyXml;

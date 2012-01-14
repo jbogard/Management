@@ -7,7 +7,7 @@ namespace NServiceBus.Management.Errors.Messages
 {
     public class ReprocessErrorMessage : ICommand
     {
-        public string MessageId { get; set; }
+        public string OriginalMessageId { get; set; }
     }
 
     public class ReprocessAllErrors : ICommand
@@ -16,7 +16,7 @@ namespace NServiceBus.Management.Errors.Messages
 
     public class DeleteErrorMessage : ICommand
     {
-        public string MessageId { get; set; }
+        public string OriginalMessageId { get; set; }
     }
 
     public interface ProcessErrorMessage : IErrorMessageDetails, ICommand
