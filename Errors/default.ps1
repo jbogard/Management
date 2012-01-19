@@ -282,7 +282,7 @@ task InstallDependentPackages {
 	cd "$baseDir\packages"
 	$files =  dir -Exclude *.config
 	cd $baseDir
-	$installDependentPackages = $DownloadDependentPackages;
+	$installDependentPackages = $true;
 	if($installDependentPackages -eq $false){
 		$installDependentPackages = ((($files -ne $null) -and ($files.count -gt 0)) -eq $false)
 	}
