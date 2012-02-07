@@ -18,8 +18,8 @@ namespace NServiceBus.Management.Errors.Notify
         {
             Console.WriteLine("Message failed in Queue: {0}", errorMessage.ProcessingFailedAddress);
             Console.WriteLine("Message Id: {0}", errorMessage.FailedMessageId);
-            Console.WriteLine("Message received at: {0}", errorMessage.TimeSent);
-            Console.WriteLine("Xml contents of message: {0}", errorMessage.XmlBody);
+            Console.WriteLine("Message received at: {0}", errorMessage.ErrorReceivedTime);
+            Console.WriteLine("Xml contents of message: {0}", errorMessage.Body);
         }
 
         #endregion

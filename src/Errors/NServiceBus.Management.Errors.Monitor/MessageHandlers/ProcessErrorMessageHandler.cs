@@ -20,11 +20,11 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
             {
                 m.FailedMessageId = message.FailedMessageId;
                 m.OriginalMessageId = message.OriginalMessageId;
-                m.AdditionalInformation = message.AdditionalInformation;
+                m.Headers = message.Headers;
                 m.ProcessingFailedAddress = message.ProcessingFailedAddress;
-                m.TimeSent = message.TimeSent;
-                m.WindowsIdentity = message.WindowsIdentity;
-                m.XmlBody = message.XmlBody;
+                m.ErrorReceivedTime = message.ErrorReceivedTime;
+                m.Identity = message.Identity;
+                m.Body = message.Body;
                 m.ExceptionInformation = message.ExceptionInformation;
             });
 

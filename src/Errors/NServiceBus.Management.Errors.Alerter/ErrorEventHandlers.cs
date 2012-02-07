@@ -5,34 +5,35 @@ using System.Text;
 using NServiceBus.Management.Errors.Messages;
 using NServiceBus.Management.Errors.Alerter.Messages;
 using System.Configuration;
+using NServiceBus;
 
 namespace NServiceBus.Management.Errors.Alerter
 {
-    class MessageHandlers : IHandleMessages<ErrorMessageReceived>, 
+    class ErrorEventHandlers : IHandleMessages<ErrorMessageReceived>, 
         IHandleMessages<ErrorMessageDeleted>,
         IHandleMessages<ErrorMessageReprocessed>
     {
         public IBus Bus { get; set; }
         private Guid alerterGuid;
 
-        public MessageHandlers()
+        public ErrorEventHandlers()
         {
-            Guid.TryParse(ConfigurationManager.AppSettings["AlerterSagaId"], out alerterGuid);
+            Guid.TryParse(ConfigurationManager.AppSettings["AlerterInstanceId"], out alerterGuid);
         }
 
         public void Handle(ErrorMessageReceived message)
         {
-            Bus.Send<ProcessErrorMessageReceived>(m => { m.AlerterSagaId = this.alerterGuid; m.MessageDetails = message; });
+            Bus.SendLocal<ProcessErrorMessageReceived>(m => { m.AlerterInstanceId = this.alerterGuid; m.MessageDetails = message; });
         }
 
         public void Handle(ErrorMessageDeleted message)
         {
-            Bus.Send<ProcessErrorMessageDeleted>(m => { m.AlerterSagaId = this.alerterGuid; m.MessageDetails = message; });
+            Bus.SendLocal<ProcessErrorMessageDeleted>(m => { m.AlerterInstanceId = this.alerterGuid; m.MessageDetails = message; });
         }
 
         public void Handle(ErrorMessageReprocessed message)
         {
-            Bus.Send<ProcessErrorMessageReprocessed>(m => { m.AlerterSagaId = this.alerterGuid; m.MessageDetails = message; });
+            Bus.SendLocal<ProcessErrorMessageReprocessed>(m => { m.AlerterInstanceId = this.alerterGuid; m.MessageDetails = message; });
         }
     }
 }

@@ -26,7 +26,7 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
                 ErrorPersister.DeleteErrorMessage(message.OriginalMessageId);
 
                 // Publish event
-                Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.OriginalMessageId; });
+                Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.OriginalMessageId; m.ErrorDeletedTime = DateTime.Now; });
             }
         }
     }

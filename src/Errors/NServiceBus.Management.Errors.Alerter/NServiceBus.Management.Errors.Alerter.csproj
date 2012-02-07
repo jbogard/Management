@@ -31,18 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NServiceBus.3.0.0-beta6\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\..\packages\NServiceBus.3.0.0-rc2\lib\net40\NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NServiceBus.3.0.0-beta6\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\NServiceBus.3.0.0-rc2\lib\net40\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Host, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\..\packages\NServiceBus.Host.3.0.0-beta6\lib\net40\NServiceBus.Host.exe</HintPath>
+      <HintPath>..\..\..\packages\NServiceBus.Host.3.0.0-rc2\lib\net40\NServiceBus.Host.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -54,14 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlerterSaga.cs" />
-    <Compile Include="AlerterSagaData.cs" />
+    <Compile Include="AlerterSummarySaga.cs" />
+    <Compile Include="AlerterSummarySagaData.cs" />
     <Compile Include="ConfigureForwarder.cs" />
     <Compile Include="ConfigureRavenPersistence.cs" />
     <Compile Include="EndpointConfig.cs" />
     <Compile Include="ErrorAlertInfo.cs" />
-    <Compile Include="ErrorMessageReceivedHandler.cs" />
-    <Compile Include="MessageHandlers.cs" />
+    <Compile Include="AlertCommandHandlers.cs" />
+    <Compile Include="ErrorEventHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterNotification.cs" />
   </ItemGroup>

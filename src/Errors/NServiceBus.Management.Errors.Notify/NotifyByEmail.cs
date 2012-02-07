@@ -157,10 +157,7 @@ namespace NServiceBus.Management.Errors.Notify
             
             return doc.DocumentNode.WriteContentTo();
         }
-
-
         
-
         public void AlertOnError(IErrorMessageDetails[] errorMessages)
         {
             // Need to set the email recipient list, if we are using the smtp notifier.

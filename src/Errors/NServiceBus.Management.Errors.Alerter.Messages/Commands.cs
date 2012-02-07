@@ -7,19 +7,19 @@ namespace NServiceBus.Management.Errors.Alerter.Messages
 {
     public class ProcessErrorMessageReceived : ICommand
     {
-        public Guid AlerterSagaId { get; set; }
+        public Guid AlerterInstanceId { get; set; }
         public ErrorMessageReceived MessageDetails { get; set; }  
     }
 
     public class ProcessErrorMessageReprocessed : ICommand
     {
-        public Guid AlerterSagaId { get; set; }
+        public Guid AlerterInstanceId { get; set; }
         public ErrorMessageReprocessed MessageDetails { get; set; }
     }
 
     public class ProcessErrorMessageDeleted : ICommand
     {
-        public Guid AlerterSagaId { get; set; }
+        public Guid AlerterInstanceId { get; set; }
         public ErrorMessageDeleted MessageDetails { get; set; }
     }
 

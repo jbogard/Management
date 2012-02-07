@@ -63,11 +63,11 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
             {
                 ErrorMessageDetails detail = new ErrorMessageDetails
                 {
-                    MessageId = errorMessage.FailedMessageId,
-                    MessageXml = errorMessage.XmlBody,
+                    MessageId = errorMessage.OriginalMessageId,
+                    MessageXml = errorMessage.Body,
                     ProcessingFailedAddress = errorMessage.ProcessingFailedAddress,
-                    TimeSent = errorMessage.TimeSent,
-                    WindowsIdentity = errorMessage.WindowsIdentity,
+                    TimeSent = errorMessage.ErrorReceivedTime,
+                    WindowsIdentity = errorMessage.Identity,
                     ExceptionInformation = errorMessage.ExceptionInformation
                 };
 
@@ -82,10 +82,10 @@ namespace NServiceBus.Management.Errors.UIModule.ViewModel
             ErrorMessageDetails newError = new ErrorMessageDetails()
             {
                 MessageId = message.OriginalMessageId,
-                MessageXml = message.XmlBody,
+                MessageXml = message.Body,
                 ProcessingFailedAddress = message.ProcessingFailedAddress,
-                TimeSent = message.TimeSent,
-                WindowsIdentity = message.WindowsIdentity,
+                TimeSent = message.ErrorReceivedTime,
+                WindowsIdentity = message.Identity,
                 ExceptionInformation = message.ExceptionInformation
             };
             errorMessages.Add(newError);

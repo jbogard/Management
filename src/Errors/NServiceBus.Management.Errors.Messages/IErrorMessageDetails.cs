@@ -10,10 +10,10 @@ namespace NServiceBus.Management.Errors.Messages
         string FailedMessageId { get; set; }
         string OriginalMessageId { get; set; }
         string ProcessingFailedAddress { get; set; }
-        string XmlBody { get; set; }
-        DateTime TimeSent { get; set; }
-        string WindowsIdentity { get; set; }
-        Dictionary<string, string> AdditionalInformation { get; set; }
+        string Body { get; set; }
+        DateTime ErrorReceivedTime { get; set; }
+        string Identity { get; set; }
+        Dictionary<string, string> Headers { get; set; }
         string ExceptionInformation { get; set; }
     }
 }

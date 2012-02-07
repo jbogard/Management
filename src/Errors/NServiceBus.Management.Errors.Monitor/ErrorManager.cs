@@ -5,6 +5,7 @@ namespace NServiceBus.Management.Errors.Monitor
     using System.Messaging;
     using Utils;
     using System.Transactions;
+    using NServiceBus.Unicast.Transport;
 
     public class ErrorManager
     {
@@ -52,17 +53,16 @@ namespace NServiceBus.Management.Errors.Monitor
 
                     var tm = MsmqUtilities.Convert(message);
 
-                    if (!tm.Headers.ContainsKey(Faults.HeaderKeys.FailedQ))
+                    if (!tm.Headers.ContainsKey(Faults.FaultsHeaderKeys.FailedQ))
                     {
                         Console.WriteLine("ERROR: Message does not have a header indicating from which queue it came. Cannot be automatically returned to queue.");
                         return false;
                     }
 
-                    using (var q = new MessageQueue(MsmqUtilities.GetFullPath(Address.Parse(tm.Headers[Faults.HeaderKeys.FailedQ]))))
+                    using (var q = new MessageQueue(MsmqUtilities.GetFullPath(Address.Parse(tm.Headers[Faults.FaultsHeaderKeys.FailedQ]))))
                         q.Send(message, MessageQueueTransactionType.Automatic);
 
                     Console.WriteLine("Success.");
-                    return true;
                     //scope.Complete();
                 }
                 catch (MessageQueueException ex)
@@ -75,9 +75,9 @@ namespace NServiceBus.Management.Errors.Monitor
                         {
                             var tm = MsmqUtilities.Convert(m);
 
-                            if (tm.Headers.ContainsKey(Faults.HeaderKeys.OriginalId))
+                            if (tm.Headers.ContainsKey(TransportHeaderKeys.OriginalId))
                             {
-                                if (messageId != tm.Headers[Faults.HeaderKeys.OriginalId])
+                                if (messageId != tm.Headers[TransportHeaderKeys.OriginalId])
                                     continue;
 
                                 Console.WriteLine("Found message - going to return to queue.");
@@ -86,7 +86,7 @@ namespace NServiceBus.Management.Errors.Monitor
                                 {
                                     using (var q = new MessageQueue(
                                                 MsmqUtilities.GetFullPath(
-                                                    Address.Parse(tm.Headers[Faults.HeaderKeys.FailedQ]))))
+                                                    Address.Parse(tm.Headers[Faults.FaultsHeaderKeys.FailedQ]))))
                                         q.Send(m, MessageQueueTransactionType.Automatic);
 
                                     queue.ReceiveByLookupId(MessageLookupAction.Current, m.LookupId,
@@ -97,6 +97,7 @@ namespace NServiceBus.Management.Errors.Monitor
 
                                 Console.WriteLine("Success.");
                                 //scope.Complete();
+
                                 return true;
                             }
                         }
@@ -127,9 +128,9 @@ namespace NServiceBus.Management.Errors.Monitor
                         {
                             var tm = MsmqUtilities.Convert(m);
 
-                            if (tm.Headers.ContainsKey(Faults.HeaderKeys.OriginalId))
+                            if (tm.Headers.ContainsKey(TransportHeaderKeys.OriginalId))
                             {
-                                if (messageId != tm.Headers[Faults.HeaderKeys.OriginalId])
+                                if (messageId != tm.Headers[TransportHeaderKeys.OriginalId])
                                     continue;
 
                                 Console.WriteLine("Found message - going to delete");

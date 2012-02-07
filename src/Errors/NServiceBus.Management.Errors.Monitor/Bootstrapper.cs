@@ -104,10 +104,10 @@ namespace NServiceBus.Management.Errors.Monitor
                 m.FailedMessageId = message.Id;
                 m.OriginalMessageId = originalId;
                 m.ProcessingFailedAddress = processingFailedAddress;
-                m.TimeSent = DateTime.ParseExact(headerDictionary["NServiceBus.TimeSent"], "yyyy-MM-dd HH:mm:ss:ffffff Z", System.Globalization.CultureInfo.InvariantCulture);
-                m.WindowsIdentity = windowsIdentity; 
-                m.AdditionalInformation = headerDictionary;
-                m.XmlBody = messageBodyXml;
+                m.ErrorReceivedTime = DateTime.ParseExact(headerDictionary["NServiceBus.TimeSent"], "yyyy-MM-dd HH:mm:ss:ffffff Z", System.Globalization.CultureInfo.InvariantCulture);
+                m.Identity = windowsIdentity; 
+                m.Headers = headerDictionary;
+                m.Body = messageBodyXml;
                 m.ExceptionInformation = exceptionInfo;
             });
 

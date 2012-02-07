@@ -59,6 +59,7 @@ namespace NServiceBus.Management.UI
             .UnicastBus()
                 .ImpersonateSender(false)
                 .LoadMessageHandlers()
+            .PurgeOnStartup(true)
             .CreateBus()
             .Start();
 

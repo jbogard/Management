@@ -8,7 +8,6 @@ namespace NServiceBus.Management.Errors.Alerter
 {
     public class ErrorAlertInfo
     {
-        public string MessageId { get; set; }
         public ErrorMessageReceived ErrorMessage { get; set; }
         public int NumberOfTimesAlerted { get; set; }
     }

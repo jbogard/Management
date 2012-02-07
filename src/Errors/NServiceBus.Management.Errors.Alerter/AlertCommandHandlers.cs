@@ -7,7 +7,7 @@ using NServiceBus.Management.Errors.Alerter.Messages;
 
 namespace NServiceBus.Management.Errors.Alerter
 {
-    class ErrorMessageReceivedHandler : IHandleMessages<SendErrorAlert>, 
+    class AlertCommandHandlers : IHandleMessages<SendErrorAlert>, 
         IHandleMessages<AlertTooManyErrorsInQueue>
     {
         public INotifyOnError ErrorNotifier { get; set; }

@@ -10,8 +10,7 @@ namespace GenerateError
     class Bootstrapper : IWantToRunAtStartup
     {
         public IBus Bus { get; set; }
-        public IManageMessageFailures FailureManager { get; set; }
-
+        
         public void Run()
         {
             
