@@ -5,7 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Management.Audi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Management.Auditing", "NServiceBus.Management.Auditing\NServiceBus.Management.Auditing.csproj", "{1295A0C9-2A77-46E4-80BF-D20D28750950}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Management.Auditing.Persister.Raven", "Persisters\RavenDB\NServiceBus.Management.Auditing.Persister.Raven\NServiceBus.Management.Auditing.Persister.Raven.csproj", "{BF6DB358-1DD5-4372-B2D5-F546A8C15005}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Management.Auditing.Persisters.Raven", "Persisters\RavenDB\NServiceBus.Management.Auditing.Persisters.Raven\NServiceBus.Management.Auditing.Persisters.Raven.csproj", "{BF6DB358-1DD5-4372-B2D5-F546A8C15005}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persisters", "Persisters", "{8F67A7CD-B832-4B09-A367-980238E81DA8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Raven", "Raven", "{EE6C6D44-0655-4352-98A6-A2B7CD6FB8C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,5 +32,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE6C6D44-0655-4352-98A6-A2B7CD6FB8C4} = {8F67A7CD-B832-4B09-A367-980238E81DA8}
+		{BF6DB358-1DD5-4372-B2D5-F546A8C15005} = {EE6C6D44-0655-4352-98A6-A2B7CD6FB8C4}
 	EndGlobalSection
 EndGlobal

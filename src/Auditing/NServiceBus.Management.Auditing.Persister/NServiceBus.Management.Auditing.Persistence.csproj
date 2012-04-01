@@ -94,9 +94,9 @@
       <Project>{1295A0C9-2A77-46E4-80BF-D20D28750950}</Project>
       <Name>NServiceBus.Management.Auditing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Persisters\RavenDB\NServiceBus.Management.Auditing.Persister.Raven\NServiceBus.Management.Auditing.Persister.Raven.csproj">
+    <ProjectReference Include="..\Persisters\RavenDB\NServiceBus.Management.Auditing.Persister.Raven\NServiceBus.Management.Auditing.Persisters.Raven.csproj">
       <Project>{BF6DB358-1DD5-4372-B2D5-F546A8C15005}</Project>
-      <Name>NServiceBus.Management.Auditing.Persister.Raven</Name>
+      <Name>NServiceBus.Management.Auditing.Persisters.Raven</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -32,7 +32,7 @@ namespace NServiceBus.Management.Auditing.Persister
             if (!MessageQueue.Exists(MsmqUtilities.GetFullPathWithoutPrefix(auditQueue)))
             {
                 // The error queue being monitored must be local to this endpoint
-                throw new Exception(string.Format("The audit queue {0} being monitored must be local to this endpoint and must exist. Make sure a transactional queue by the specified name exists. The error queue to be monitored is specified in the app.config", auditQueue));
+                throw new Exception(string.Format("The audit queue {0} being monitored must be local to this endpoint and must exist. Make sure a transactional queue by the specified name exists. The audit queue to be monitored is specified in the app.config", auditQueue));
             }
 
             // Create an in-memory transport with the same configuration as that of the current endpoint.
@@ -60,7 +60,7 @@ namespace NServiceBus.Management.Auditing.Persister
         {
             var message = e.Message;
 
-            // Get the xml content of the message that failed
+            // Get the xml content of the message in the audit Q that's being stored.
             var doc = new XmlDocument();
             doc.Load(new MemoryStream(message.Body));
             var messageBodyXml = doc.InnerXml;

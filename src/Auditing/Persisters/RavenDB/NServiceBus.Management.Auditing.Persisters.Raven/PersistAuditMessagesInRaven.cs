@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Raven.Client;
 
-namespace NServiceBus.Management.Auditing.Persister.Raven
+namespace NServiceBus.Management.Auditing.Persisters.Raven
 {
     public class PersistAuditMessagesInRaven : IPersistAuditMessages
     {

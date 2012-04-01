@@ -8,8 +8,8 @@
     <ProjectGuid>{BF6DB358-1DD5-4372-B2D5-F546A8C15005}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NServiceBus.Management.Auditing.Persister.Raven</RootNamespace>
-    <AssemblyName>NServiceBus.Management.Auditing.Persister.Raven</AssemblyName>
+    <RootNamespace>NServiceBus.Management.Auditing.Persisters.Raven</RootNamespace>
+    <AssemblyName>NServiceBus.Management.Auditing.Persisters.Raven</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
