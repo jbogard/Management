@@ -28,6 +28,7 @@ namespace NServiceBus.Management.Errors.Monitor
         public IBuilder Builder { get; set; }
         public ISendMessages MessageForwarder { get; set; }
         private Address errorStorageQueueAddress;
+        public IPersistErrorMessages ErrorPersister { get; set; }
 
         public void Run()
         {
@@ -97,20 +98,24 @@ namespace NServiceBus.Management.Errors.Monitor
             var exceptionInfo = string.Format("{0} - {1} {2}", headerDictionary["NServiceBus.ExceptionInfo.ExceptionType"],
                 headerDictionary["NServiceBus.ExceptionInfo.Message"],
                 headerDictionary["NServiceBus.ExceptionInfo.StackTrace"]);
-            
-            // Send a command to the processing endpoint.
-            Bus.Send<ProcessErrorMessage>(m =>
+
+            ErrorMessageReceived errorEvent = Bus.CreateInstance<ErrorMessageReceived>(m =>
             {
                 m.FailedMessageId = message.Id;
                 m.OriginalMessageId = originalId;
+                m.Headers = message.Headers;
                 m.ProcessingFailedAddress = processingFailedAddress;
                 m.ErrorReceivedTime = DateTime.ParseExact(headerDictionary["NServiceBus.TimeSent"], "yyyy-MM-dd HH:mm:ss:ffffff Z", System.Globalization.CultureInfo.InvariantCulture);
-                m.Identity = windowsIdentity; 
-                m.Headers = headerDictionary;
+                m.Identity = windowsIdentity;
                 m.Body = messageBodyXml;
                 m.ExceptionInformation = exceptionInfo;
             });
 
+            // Save the error in the persistent store
+            ErrorPersister.SaveErrorMessage(errorEvent);
+
+            // Publish event
+            Bus.Publish(errorEvent);
         }
 
         public void Stop()

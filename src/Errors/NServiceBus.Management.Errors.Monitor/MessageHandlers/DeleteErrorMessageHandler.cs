@@ -11,23 +11,22 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
     {
         public IBus Bus { get; set; }
         public IPersistErrorMessages ErrorPersister { get; set; }
-        
-        private ErrorManager errorManager = new ErrorManager();
+
+        private DeleteMessageFromQueueHelper deleteHelper = new DeleteMessageFromQueueHelper();
 
         public void Handle(DeleteErrorMessage message)
         {
             Console.WriteLine("Removing message {0}", message.OriginalMessageId);
 
             // Get rid of message in the storage queue
-            errorManager.InputQueue = new Address(string.Format("{0}.Storage", ConfigurationManager.AppSettings["ErrorQueueToMonitor"]),Environment.MachineName);
-            if (errorManager.DeleteMessageFromSourceQueue(message.OriginalMessageId))
-            {
-                // Get rid of message in the persistent store.
-                ErrorPersister.DeleteErrorMessage(message.OriginalMessageId);
+            deleteHelper.InputQueue = new Address(string.Format("{0}.Storage", ConfigurationManager.AppSettings["ErrorQueueToMonitor"]), Environment.MachineName);
+            deleteHelper.DeleteMessageFromSourceQueue(message.OriginalMessageId);
+            
+            // Get rid of message in the persistent store.
+            ErrorPersister.DeleteErrorMessage(message.OriginalMessageId);
 
-                // Publish event
-                Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.OriginalMessageId; m.ErrorDeletedTime = DateTime.Now; });
-            }
+            // Publish event
+            Bus.Publish<ErrorMessageDeleted>(m => { m.MessageId = message.OriginalMessageId; m.ErrorDeletedTime = DateTime.Now; });
         }
     }
 }

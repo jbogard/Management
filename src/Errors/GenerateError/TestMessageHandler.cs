@@ -11,12 +11,14 @@ namespace GenerateError
     {
         public void Handle(SendTestMessage message)
         {
+            throw new NotImplementedException();
             Console.WriteLine("Hello World!!!");
-            if (message.Name.StartsWith("Hello"))
-            {
-                throw new NotImplementedException();
-            }
-            else
+
+            //if (message.Name.StartsWith("Hello"))
+            //{
+            //    throw new NotImplementedException();
+            //}
+            //else
             {
                 Console.WriteLine("Hello again!!!");
             }

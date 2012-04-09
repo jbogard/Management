@@ -58,7 +58,7 @@ namespace NServiceBus.Management.Errors.Persister
                     }
                 }
 
-                if (errorMessage != null)
+                //if (errorMessage != null)
                 {
                     session.Delete<ErrorMessageReceived>(errorMessage);
                     session.SaveChanges();

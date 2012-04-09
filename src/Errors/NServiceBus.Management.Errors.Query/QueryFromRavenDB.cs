@@ -31,6 +31,7 @@ namespace NServiceBus.Management.Errors.Query
                 using (var session = documentStore.OpenSession())
                 {
                     var errorMessages = from errMsg in session.Query<ErrorMessageReceived>()
+                                        orderby errMsg.ErrorReceivedTime
                                         select errMsg;
                     return errorMessages.ToList<IErrorMessageDetails>().AsReadOnly();
                 }

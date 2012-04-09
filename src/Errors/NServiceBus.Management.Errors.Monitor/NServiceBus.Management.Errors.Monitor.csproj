@@ -32,39 +32,44 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncCtpLibrary">
-      <HintPath>..\..\..\packages\RavenDB.1.0.573\lib\net40\AsyncCtpLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NServiceBus.3.0.1\lib\net40\NServiceBus.dll</HintPath>
+      <HintPath>..\..\..\packages\NServiceBus.3.0.3\lib\net40\NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NServiceBus.3.0.1\lib\net40\NServiceBus.Core.dll</HintPath>
+      <HintPath>..\..\..\packages\NServiceBus.3.0.3\lib\net40\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Host, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
       <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\..\packages\NServiceBus.Host.3.0.1\lib\net40\NServiceBus.Host.exe</HintPath>
+      <HintPath>..\..\..\packages\NServiceBus.Host.3.0.3\lib\net40\NServiceBus.Host.exe</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\..\packages\RavenDB.1.0.573\lib\net40\Raven.Abstractions.dll</HintPath>
+    <Reference Include="NServiceBus.Tools.Management.Errors.ReturnToSourceQueue, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\NServiceBus.Tools.Management.Errors.ReturnToSourceQueue.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Debug">
-      <HintPath>..\..\..\packages\RavenDB.1.0.573\lib\net40\Raven.Client.Debug.dll</HintPath>
+    <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\RavenDB.1.0.888\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\..\packages\RavenDB.1.0.573\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Debug, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\RavenDB.1.0.888\lib\net40\Raven.Client.Debug.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.MvcIntegration">
-      <HintPath>..\..\..\packages\RavenDB.1.0.573\lib\net40\Raven.Client.MvcIntegration.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\RavenDB.1.0.888\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight.FSharp">
+      <HintPath>..\..\..\packages\RavenDB.1.0.888\lib\net40\Raven.Client.Lightweight.FSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.MvcIntegration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\RavenDB.1.0.888\lib\net40\Raven.Client.MvcIntegration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -82,21 +87,15 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ConfigureForwarder.cs" />
     <Compile Include="EndpointConfig.cs" />
-    <Compile Include="ErrorManager.cs" />
+    <Compile Include="DeleteMessageFromQueueHelper.cs" />
     <Compile Include="MessageHandlers\DeleteErrorMessageHandler.cs" />
-    <Compile Include="MessageHandlers\ProcessErrorMessageHandler.cs" />
     <Compile Include="MessageHandlers\ReprocessErrorHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegisterPersister.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NServiceBus.Management.Errors.Messages\NServiceBus.Management.Errors.Messages.csproj">
       <Project>{EE39F851-3938-4C11-83B9-1EEEB357C0C1}</Project>
       <Name>NServiceBus.Management.Errors.Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NServiceBus.Management.Errors.Notify\NServiceBus.Management.Errors.Notify.csproj">
-      <Project>{0794E08D-BE4E-4054-A2A3-071435DE728E}</Project>
-      <Name>NServiceBus.Management.Errors.Notify</Name>
     </ProjectReference>
     <ProjectReference Include="..\NServiceBus.Management.Errors.Persister\NServiceBus.Management.Errors.Persister.csproj">
       <Project>{598457B0-CB15-4486-BC02-6763B915C455}</Project>

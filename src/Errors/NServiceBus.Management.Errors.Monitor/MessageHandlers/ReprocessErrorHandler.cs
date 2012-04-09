@@ -7,6 +7,7 @@ using System.Messaging;
 //using System.Transactions;
 using System.Configuration;
 using NServiceBus.Utils;
+using NServiceBus.Tools.Management.Errors.ReturnToSourceQueue;
 
 namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
 {
@@ -21,14 +22,13 @@ namespace NServiceBus.Management.Errors.Monitor.MessageHandlers
             errorManager.InputQueue = new Address(string.Format("{0}.Storage", ConfigurationManager.AppSettings["ErrorQueueToMonitor"]), Environment.MachineName);
 
             // Reprocess the error message.
-            if (errorManager.ReturnMessageToSourceQueue(messageToReprocess.OriginalMessageId))
-            {
-                // Remove message from the persistent store.
-                ErrorPersister.DeleteErrorMessage(messageToReprocess.OriginalMessageId);
+            errorManager.ReturnMessageToSourceQueue(messageToReprocess.OriginalMessageId);
+            
+            // Remove message from the persistent store.
+            ErrorPersister.DeleteErrorMessage(messageToReprocess.OriginalMessageId);
 
-                // Publish event
-                Bus.Publish<ErrorMessageReprocessed>(m => { m.MessageId = messageToReprocess.OriginalMessageId; m.ErrorReprocessedTime = DateTime.Now; });
-            }
+            // Publish event
+            Bus.Publish<ErrorMessageReprocessed>(m => { m.MessageId = messageToReprocess.OriginalMessageId; m.ErrorReprocessedTime = DateTime.Now; });
         }
     }
 }
