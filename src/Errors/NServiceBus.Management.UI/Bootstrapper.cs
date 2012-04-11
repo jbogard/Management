@@ -10,9 +10,9 @@ using NServiceBus.Unicast;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Unity;
 using NServiceBus.Management.Errors;
-using NServiceBus.Management.Errors.Query;
 using Raven.Client.Document;
 using System.Configuration;
+using NServiceBus.Management.Errors.DataAccess.Query;
 
 
 namespace NServiceBus.Management.UI

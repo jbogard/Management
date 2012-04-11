@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NServiceBus.Management.Errors.Messages;
 using Microsoft.Practices.Prism.Events;
-using NServiceBus.Management.Errors.Events;
+using NServiceBus.Management.Errors.PrismEvents;
 using System.Windows.Threading;
 
 namespace NServiceBus.Management.UI.MessageHandlers
