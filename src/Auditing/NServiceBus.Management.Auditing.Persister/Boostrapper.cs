@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using NServiceBus.Unicast.Transport;
 using NServiceBus.Unicast.Transport.Transactional;
 using NServiceBus.Unicast.Queuing.Msmq;
@@ -10,6 +11,9 @@ using NServiceBus.Utils;
 using System.Configuration;
 using System.Xml;
 using System.IO;
+using Newtonsoft.Json;
+using Raven.Json.Linq;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace NServiceBus.Management.Auditing.Persister
 {
@@ -48,12 +52,12 @@ namespace NServiceBus.Management.Auditing.Persister
             };
 
             AuditMessageQueueTransport.Start(new Address(auditQueue, machineName));
-            AuditMessageQueueTransport.TransportMessageReceived += new EventHandler<TransportMessageReceivedEventArgs>(AuditMessageQueueTransport_TransportMessageReceived);    
+            AuditMessageQueueTransport.TransportMessageReceived += new EventHandler<TransportMessageReceivedEventArgs>(AuditMessageQueueTransport_TransportMessageReceived);
         }
 
         public void Stop()
         {
-            AuditMessageQueueTransport.TransportMessageReceived -= new EventHandler<TransportMessageReceivedEventArgs>(AuditMessageQueueTransport_TransportMessageReceived);            
+            AuditMessageQueueTransport.TransportMessageReceived -= new EventHandler<TransportMessageReceivedEventArgs>(AuditMessageQueueTransport_TransportMessageReceived);
         }
 
         void AuditMessageQueueTransport_TransportMessageReceived(object sender, TransportMessageReceivedEventArgs e)
@@ -61,9 +65,26 @@ namespace NServiceBus.Management.Auditing.Persister
             var message = e.Message;
 
             // Get the xml content of the message in the audit Q that's being stored.
-            var doc = new XmlDocument();
-            doc.Load(new MemoryStream(message.Body));
-            var messageBodyXml = doc.InnerXml;
+            //var doc = new XmlDocument();
+            //doc.Load(new MemoryStream(message.Body));
+            //var messageBodyXml = doc.InnerXml;
+
+
+            var messageBodyXml = System.Text.Encoding.UTF8.GetString(message.Body);
+            RavenJObject jsonBody;
+            
+            if (messageBodyXml.StartsWith("["))
+            {
+                jsonBody = (RavenJObject) RavenJArray.Load(new JsonTextReader(new StreamReader(new MemoryStream(message.Body)))).Values().First();
+            }
+            else
+            {
+                var doc = new XmlDocument();
+                doc.Load(new MemoryStream(message.Body));
+                var firstMessageNode = doc.DocumentElement.ChildNodes.Cast<XmlNode>().First();
+                var convertedJson = JsonConvert.SerializeXmlNode(firstMessageNode, Formatting.Indented, true);
+                jsonBody = RavenJObject.Parse(convertedJson);
+            }
 
             // Get the header list as a key value dictionary...
             Dictionary<string, string> headerDictionary = message.Headers.ToDictionary(k => k.Key, v => v.Value);
@@ -79,8 +100,10 @@ namespace NServiceBus.Management.Auditing.Persister
             {
                 MessageId = message.Id,
                 OriginalMessageId = message.GetOriginalId(),
-                Body = messageBodyXml,
+                OriginalBody = messageBodyXml,
+                Body = jsonBody,
                 Headers = headerDictionary,
+                ReplyToAddress = message.ReplyToAddress.ToString(),
                 MessageType = messageType,
                 ReceivedTime = DateTime.ParseExact(headerDictionary["NServiceBus.TimeSent"], "yyyy-MM-dd HH:mm:ss:ffffff Z", System.Globalization.CultureInfo.InvariantCulture)
             };

@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Management.Auditing.Persistence", "NServiceBus.Management.Auditing.Persister\NServiceBus.Management.Auditing.Persistence.csproj", "{ABB1E0FE-FFAD-485E-9DA6-B1B09C72DA74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Management.Auditing", "NServiceBus.Management.Auditing\NServiceBus.Management.Auditing.csproj", "{1295A0C9-2A77-46E4-80BF-D20D28750950}"
@@ -10,6 +10,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persisters", "Persisters", "{8F67A7CD-B832-4B09-A367-980238E81DA8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Raven", "Raven", "{EE6C6D44-0655-4352-98A6-A2B7CD6FB8C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{33AB1AA3-4239-4CE5-BBE6-8916FDA85747}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
